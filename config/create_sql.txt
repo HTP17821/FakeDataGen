@@ -1,0 +1,50 @@
+-- Create the EmployeeManagement database
+CREATE DATABASE EmployeeManagement;
+GO
+
+-- Switch to the newly created database
+USE EmployeeManagement;
+GO
+
+-- Create the Departments table
+CREATE TABLE Departments (
+    department_id INT PRIMARY KEY, -- Unique identifier for each department
+    department_name NVARCHAR(100) NOT NULL -- Name of the department
+);
+
+-- Create the Job Titles table
+CREATE TABLE Job_Titles (
+    job_title_id INT PRIMARY KEY, -- Unique identifier for each job title
+    job_title NVARCHAR(100) NOT NULL -- Name of the job title
+);
+
+-- Create the Employees table
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY, -- Unique identifier for each employee
+    name NVARCHAR(100) NOT NULL, -- Employee's name
+    address NVARCHAR(255), -- Employee's address
+    phone NVARCHAR(50), -- Employee's phone number
+    email NVARCHAR(100), -- Employee's email address
+    dob DATE, -- Date of birth of the employee
+    job_title_id INT, -- Reference to the job title
+    start_date DATE, -- Date when the employee started working
+    FOREIGN KEY (job_title_id) REFERENCES Job_Titles(job_title_id) -- Foreign key linking to Job_Titles
+);
+
+-- Create the Salaries table
+CREATE TABLE Salaries (
+    salary_id INT PRIMARY KEY, -- Unique identifier for each salary record
+    employee_id INT, -- Reference to the employee
+    salary_amount DECIMAL(18, 2) NOT NULL, -- Amount of the salary
+    effective_date DATE, -- Date when the salary becomes effective
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) -- Foreign key linking to Employees
+);
+
+-- Create the Employee_Department table (Many-to-Many Relationship)
+CREATE TABLE Employee_Department (
+    employee_department_id INT PRIMARY KEY, -- Unique identifier for each employee-department relationship
+    employee_id INT, -- Reference to the employee
+    department_id INT, -- Reference to the department
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id), -- Foreign key linking to Employees
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id) -- Foreign key linking to Departments
+);
